@@ -7,7 +7,6 @@ const Category = () => {
       <Text>카테고리</Text>
       <ScrollView style={styles.categoryList} horizontal={true}>
         <Text style={styles.categoryItem}>전체</Text>
-        <Text style={styles.categoryItem}>전체</Text>
       </ScrollView>
     </View>
   );

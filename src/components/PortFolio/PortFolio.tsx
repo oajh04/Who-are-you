@@ -8,7 +8,11 @@ const PortFolio = ({navigation}: any) => {
     <View>
       <Category />
       <ScrollView>
-        <TouchableOpacity onPress={() => navigation.navigate('ProjectInfo')}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProjectInfo', {id: 1})}>
+          <Card />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Card />
         </TouchableOpacity>
       </ScrollView>
