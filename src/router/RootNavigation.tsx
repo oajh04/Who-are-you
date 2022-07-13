@@ -1,10 +1,16 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import List from '../components/List/List';
-import ProjectInfo from '../components/PortFolio/ProjectInfo/ProjectInfo';
+import ProjectInfo from '../components/ProjectInfo/ProjectInfo';
 import BottomTabNavigator from './BottomTabNavigator';
+import Login from '../components/Login/Login';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Root: any;
+  ProjectInfo: {id: number};
+  Login: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
   return (
@@ -12,12 +18,25 @@ export default function RootNavigator() {
       <Stack.Screen
         name="Root"
         component={BottomTabNavigator}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ProjectInfo"
+        component={ProjectInfo}
+        options={{
+          title: '홈',
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="ProjectInfo" component={ProjectInfo} />
-      <Stack.Group screenOptions={{presentation: 'modal'}}>
+      {/* <Stack.Group screenOptions={{presentation: 'modal'}}>
         <Stack.Screen name="Modal" component={List} />
-      </Stack.Group>
+      </Stack.Group> */}
     </Stack.Navigator>
   );
 }
