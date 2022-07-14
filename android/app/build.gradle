@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services" 
 
 import com.android.build.OutputFile
 
@@ -139,6 +140,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -256,6 +258,11 @@ android {
 }
 
 dependencies {
+
+    implementation platform('com.google.firebase:firebase-bom:29.1.0') // 추가 (line:221)
+    implementation "com.google.firebase:firebase-analytics" // 추가 (line:222)
+
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion

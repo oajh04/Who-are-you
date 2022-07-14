@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "991205971341",
+    "project_id": "who-are-you-157f1",
+    "storage_bucket": "who-are-you-157f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991205971341:android:bf750a2635f600dd92d9c4",
+        "android_client_info": {
+          "package_name": "com.whoareyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991205971341-0guenspovicqp47j9lm0knv73nonl6to.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6nDawGx3fHyysKEaPKJBYwBwBasACwvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991205971341-0guenspovicqp47j9lm0knv73nonl6to.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
