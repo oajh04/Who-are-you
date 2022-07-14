@@ -1,14 +1,32 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import DefaultBox from '../common/DefaultBox/DefaultBox';
 
-const Card = () => {
+interface Props {
+  name: string;
+  description: string;
+  start_at: string;
+  end_at: string;
+}
+
+const Card = ({name, description, start_at, end_at}: Props) => {
   return (
-    <DefaultBox name="Pick">
-      <Text>교내 방과후 출석부 시스템입니다.</Text>
-      <Text>21.07 ~ 22.07</Text>
+    <DefaultBox name={name}>
+      <Text style={styles.description}>{description}</Text>
+      <Text>
+        {start_at} ~ {end_at}
+      </Text>
     </DefaultBox>
   );
 };
+
+const styles = StyleSheet.create({
+  description: {
+    width: '100%',
+    flexWrap: 'nowrap',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+});
 
 export default Card;
