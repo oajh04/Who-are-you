@@ -1,37 +1,85 @@
-import React from 'react';
-import {Text, View, StyleSheet, Image, ScrollView} from 'react-native';
-import DefaultBox from '../common/DefaultBox/DefaultBox';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 
-const Home = () => {
+import DefaultBox from '../common/DefaultBox/DefaultBox';
+import SkillBox from '../ProjectInfo/SkillBox/SkillBox';
+import {getUId} from '../../libs/functions/idManagement';
+import {getUser} from '../../libs/apis/user';
+import Contact from './Contact';
+
+interface IProfile {
+  name: string;
+  contact: {
+    email: string;
+    phone_number: string;
+    github: string;
+  };
+  award: string[];
+  certificate: string[];
+  skills: string[];
+  schools: string[];
+}
+
+const Home = ({navigation}: any) => {
+  const [data, setData] = useState<any | IProfile>({});
+  const {name, contact, award, certificate, skills, schools} = data;
+
+  useEffect(() => {
+    getUId().then(res => {
+      getUser(res).then((response: any) => {
+        setData(response);
+      });
+    });
+  }, [navigation]);
+
   return (
     <>
-      <View style={styles.wrapper}>
-        <View style={styles.profile}>
-          <Text style={styles.title}>한준호</Text>
-          <Image
-            source={{uri: 'https://picsum.photos/id/1048/5616/3744'}}
-            style={styles.image}
-          />
+      {data && (
+        <View style={styles.wrapper}>
+          <View style={styles.profile}>
+            <Text style={styles.title}>{name}</Text>
+            <Image
+              source={{uri: 'https://picsum.photos/id/1048/5616/3744'}}
+              style={styles.image}
+            />
+          </View>
+          <ScrollView style={styles.contentWrapper}>
+            <Contact {...contact} />
+
+            <DefaultBox name={'학력'}>
+              {schools?.map((i: string) => {
+                return <Text key={i}>{i}</Text>;
+              })}
+            </DefaultBox>
+
+            <SkillBox skill_arr={skills} />
+
+            <DefaultBox name={'자격증'}>
+              {certificate?.map((i: string) => {
+                return <Text key={i}>{i}</Text>;
+              })}
+            </DefaultBox>
+
+            <DefaultBox name={'수상 및 기타 이력'}>
+              {award?.map((i: string) => {
+                return <Text key={i}>{i}</Text>;
+              })}
+            </DefaultBox>
+
+            <DefaultBox name={'포트폴리오'}>
+              <Text>https://oajh04.super.site</Text>
+            </DefaultBox>
+          </ScrollView>
         </View>
-        <ScrollView style={styles.contentWrapper}>
-          <DefaultBox name={'학력'}>
-            <Text>대덕소프트웨어마이스터고등학교</Text>
-            <Text>20.03 ~ 재학중</Text>
-          </DefaultBox>
-          <DefaultBox name={'기술 스택'}>
-            <Text>정보처리기능사</Text>
-          </DefaultBox>
-          <DefaultBox name={'자격증'}>
-            <Text>정보처리기능사</Text>
-          </DefaultBox>
-          <DefaultBox name={'수상 및 기타 이력'}>
-            <Text>나Be 한마당 코딩경진대회 동상</Text>
-          </DefaultBox>
-          <DefaultBox name={'포트폴리오'}>
-            <Text>https://oajh04.super.site</Text>
-          </DefaultBox>
-        </ScrollView>
-      </View>
+      )}
     </>
   );
 };
@@ -41,6 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#121212',
   },
   contentWrapper: {
+    height: Dimensions.get('window').height - 240,
     backgroundColor: '#efefef',
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
