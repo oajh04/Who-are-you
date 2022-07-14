@@ -2,9 +2,8 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../components/Home/Home';
 import PortFolio from '../components/PortFolio/PortFolio';
-import List from '../components/List/List';
-// import {HomeSVG, PortFolioSVG} from '../assets';
-import {Text} from 'react-native';
+import CreateProject from '../components/CreateProject/CreateProject';
+import {HomeSVG, PortfolioSVG} from '../assets';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +13,7 @@ const BottomTabNavigator = () => {
       <Tab.Navigator
         initialRouteName={'Home'}
         backBehavior="order"
-        screenOptions={{tabBarStyle: {height: 50}}}>
+        screenOptions={{tabBarStyle: {height: 50}, tabBarShowLabel: false}}>
         <Tab.Screen
           name="Home"
           component={Home}
@@ -28,12 +27,20 @@ const BottomTabNavigator = () => {
               fontWeight: 'bold',
             },
             tabBarIcon: () => {
-              return <Text>Home</Text>;
+              return <HomeSVG />;
             },
           }}
         />
-        <Tab.Screen name="PortFolio" component={PortFolio} />
-        <Tab.Screen name="List" component={List} />
+        <Tab.Screen
+          name="PortFolio"
+          component={PortFolio}
+          options={{
+            tabBarIcon: () => {
+              return <PortfolioSVG />;
+            },
+          }}
+        />
+        <Tab.Screen name="CreateProject" component={CreateProject} />
       </Tab.Navigator>
     </>
   );
