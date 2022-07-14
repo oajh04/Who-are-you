@@ -4,14 +4,14 @@ import DefaultBox from '../../common/DefaultBox/DefaultBox';
 import SkillCard from './SkillCard';
 
 interface Props {
-  skill_arr: string[];
+  skill_arr?: string[];
 }
 
 const SkillBox = ({skill_arr}: Props) => {
   return (
     <DefaultBox name="Skill">
       <View style={styles.skillBox}>
-        {skill_arr.map((i: string) => {
+        {skill_arr?.map((i: string) => {
           return <SkillCard key={i}>{i}</SkillCard>;
         })}
       </View>
