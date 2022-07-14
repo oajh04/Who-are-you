@@ -19,7 +19,7 @@ const DefaultBox = ({children, name}: Props) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: 10,
+    padding: 15,
     backgroundColor: 'white',
     margin: 5,
     marginLeft: 0,
