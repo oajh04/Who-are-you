@@ -1,11 +1,11 @@
 import {StackNavigationProp, RouteProp} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {RootStackParamList} from '../../router/RootNavigation';
 import Description from './Description/Description';
 import ProjectTitle from './ProjectTitle/ProjectTitle';
 import SkillBox from './SkillBox/SkillBox';
-import data from '../../../Data.json';
+import {getProject} from '../../libs/apis/project';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'ProjectInfo'>;
@@ -13,10 +13,11 @@ interface Props {
 }
 
 const ProjectInfo = ({navigation, route}: Props) => {
+  const [data, setData] = useState<any>({});
   const {name, start_at, end_at, description, image_arr, skills} = data;
   useEffect(() => {
     navigation.setOptions({title: 'Pick'});
-    // console.log(route.params.id);
+    getProject(route.params.id).then(res => setData(res));
   }, [navigation, route]);
 
   return (
