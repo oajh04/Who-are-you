@@ -4,7 +4,6 @@ export const userCollection = firestore().collection('user');
 
 export function createUser({id, displayName, photoURL}: any) {
   return userCollection.doc(id).set({
-    id,
     displayName,
     photoURL,
   });
@@ -13,4 +12,9 @@ export function createUser({id, displayName, photoURL}: any) {
 export async function getUser(id: any) {
   const doc = await userCollection.doc(id).get();
   return doc.data();
+}
+
+export async function getUserList() {
+  const doc = await userCollection.get();
+  return doc;
 }
