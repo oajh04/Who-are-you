@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {View, TextInput, StyleSheet, Text, Alert} from 'react-native';
-import {signIn, signUp} from '../../libs/apis/auth';
+import {View, TextInput, StyleSheet, Text, Dimensions} from 'react-native';
+import {signIn} from '../../libs/apis/auth';
+import {setUId} from '../../libs/functions/idManagement';
+import {useToast} from 'react-native-toast-notifications';
 import {getUser} from '../../libs/apis/user';
-import {setUId, getUId} from '../../libs/functions/idManagement';
 
-const Login = () => {
+const Login = ({navigation}: any) => {
+  const toast = useToast();
   const [info, setInfo] = useState<{email: string; password: string}>({
     email: '',
     password: '',
@@ -17,32 +19,22 @@ const Login = () => {
     });
   };
 
-  const WRYSignUp = () => {
-    signUp(info)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        //console.log(err.code);
-        switch (err.code) {
-          case 'auth/weak-password':
-            console.log('비밀번호는 6자리 이상이어야 합니다');
-            break;
-          case 'auth/invalid-email':
-            console.log('잘못된 이메일 주소입니다');
-            break;
-          case 'auth/email-already-in-use':
-            console.log('이미 가입되어 있는 계정입니다');
-            break;
-        }
-      });
-  };
-
   const WRYSignIn = async () => {
     try {
       const {user} = await signIn(info);
-      Alert.alert(`성공 ${user.uid}`);
+      toast.show('로그인 성공!', {
+        type: 'success',
+        duration: 2000,
+      });
       setUId(user.uid);
+      getUser(user.uid).then(res => {
+        if (res) {
+          navigation.navigate('Home');
+        } else {
+          console.log(user.uid);
+          navigation.navigate('CreateProfile', {uid: user.uid});
+        }
+      });
     } catch (e: any) {
       console.log(e);
       switch (e.code) {
@@ -54,12 +46,14 @@ const Login = () => {
     }
   };
 
-  const WRYSign = () => {
-    getUId();
-  };
-
   return (
-    <View style={{padding: 15}}>
+    <View
+      style={{
+        padding: 15,
+        backgroundColor: 'white',
+        height: '100%',
+        paddingTop: 40,
+      }}>
       <TextInput
         onChangeText={text => setUserInfo('email', text)}
         style={styles.input}
@@ -71,8 +65,12 @@ const Login = () => {
         placeholder="password"
         secureTextEntry={true}
       />
-      <Text onPress={WRYSignIn}>asd</Text>
-      <Text onPress={WRYSign}>asd</Text>
+      <Text onPress={() => navigation.navigate('Register')}>
+        회원가입하러 가기
+      </Text>
+      <Text onPress={WRYSignIn} style={styles.loginButton}>
+        로그인
+      </Text>
     </View>
   );
 };
@@ -83,6 +81,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  loginButton: {
+    position: 'absolute',
+    left: 15,
+    bottom: 15,
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#34C557',
+    color: 'white',
+    width: Dimensions.get('window').width - 30,
+    textAlign: 'center',
   },
 });
 
