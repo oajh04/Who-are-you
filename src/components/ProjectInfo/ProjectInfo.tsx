@@ -1,4 +1,5 @@
-import {StackNavigationProp, RouteProp} from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {RootStackParamList} from '../../router/RootNavigation';
