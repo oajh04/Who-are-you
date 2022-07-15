@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import {Text, View, StyleSheet, Image, ScrollView} from 'react-native';
 import SkillBox from '../ProjectInfo/SkillBox/SkillBox';
 import {getUser} from '../../libs/apis/user';
 import Contact from './Contact';
@@ -44,6 +37,7 @@ const UserProfile = ({navigation, route}: Props) => {
         return navigation.navigate('Home');
       }
       setData(response);
+      navigation.setOptions({title: response.name});
     });
   }, [navigation, route]);
 
