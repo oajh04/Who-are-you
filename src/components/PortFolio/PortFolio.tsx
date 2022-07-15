@@ -1,25 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, TouchableOpacity} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import Card from './Card';
 import Category from './Category';
+import {RootStackParamList} from '../../router/RootNavigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {getProjectList} from '../../libs/apis/project';
 
-const PortFolio = ({navigation}: any) => {
-  const [data, setData] = useState([{}]);
-  const projectCollection = firestore().collection('projectList');
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, 'Root'>;
+}
+
+const PortFolio = ({navigation}: Props) => {
+  const [data, setData] = useState<any>([]);
 
   useEffect(() => {
-    const callApi = async () => {
-      try {
-        const res = await projectCollection.get();
-        setData(res.docs?.map((doc: any) => ({...doc.data(), id: doc.id})));
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    };
-
-    callApi();
-  });
+    getProjectList().then(res => {
+      setData(res.docs?.map((doc: any) => ({...doc.data(), id: doc.id})));
+    });
+  }, []);
 
   return (
     <View>
@@ -30,7 +28,7 @@ const PortFolio = ({navigation}: any) => {
             <TouchableOpacity
               key={i.id}
               onPress={() => navigation.navigate('ProjectInfo', {id: i.id})}>
-              <Card {...i} />
+              <Card {...i} key={`${i.id}-card`} />
             </TouchableOpacity>
           );
         })}
