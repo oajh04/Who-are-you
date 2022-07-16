@@ -1,10 +1,12 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import {TouchableOpacity, ScrollView} from 'react-native';
 import {getUserList} from '../../libs/apis/user';
+import {IProfile} from '../../libs/interfaces/Profile';
+import UserCard from './UserCard';
 
 const Home = ({navigation}: any) => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any | IProfile[]>([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -15,17 +17,22 @@ const Home = ({navigation}: any) => {
 
   return (
     <>
-      <View>
-        {data.map((i: any) => {
+      <ScrollView>
+        {data.map((i: IProfile) => {
+          const {profile_image_url, name, contact, id} = i;
           return (
-            <Text
-              key={i.id}
-              onPress={() => navigation.navigate('UserProfile', {uid: i.id})}>
-              {i.name}
-            </Text>
+            <TouchableOpacity
+              key={id}
+              onPress={() => navigation.navigate('UserProfile', {uid: id})}>
+              <UserCard
+                image_url={profile_image_url}
+                name={name}
+                email={contact.email}
+              />
+            </TouchableOpacity>
           );
         })}
-      </View>
+      </ScrollView>
     </>
   );
 };
