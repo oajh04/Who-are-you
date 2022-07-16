@@ -4,7 +4,7 @@ import Profile from '../components/Profile/Profile';
 import PortFolio from '../components/PortFolio/PortFolio';
 import {HomeSVG, LogOutSVG, PortfolioSVG, ProfileSVG} from '../assets';
 import Home from '../components/Home/Home';
-import {Text, View} from 'react-native';
+import {Text} from 'react-native';
 import {setUId} from '../libs/functions/idManagement';
 
 export type BottomTabParamList = {

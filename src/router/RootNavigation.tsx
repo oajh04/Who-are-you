@@ -6,7 +6,6 @@ import Login from '../components/Login/Login';
 import Register from '../components/Register/Register';
 import CreateProfile from '../components/CreateProfile/CreateProfile';
 import UserProfile from '../components/UserProfile/Profile';
-import Home from '../components/Home/Home';
 
 export type RootStackParamList = {
   Root: undefined;
@@ -15,7 +14,6 @@ export type RootStackParamList = {
   Register: undefined;
   CreateProfile: {uid: string};
   UserProfile: {uid: string};
-  Home: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,7 +35,6 @@ export default function RootNavigator() {
           title: '프로젝트',
         }}
       />
-      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Login"
         component={Login}
@@ -56,11 +53,17 @@ export default function RootNavigator() {
       <Stack.Screen
         name="UserProfile"
         component={UserProfile}
-        options={{title: '프로필'}}
+        options={{
+          title: '프로필',
+          headerStyle: {
+            backgroundColor: '#121212',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       />
-      {/* <Stack.Group screenOptions={{presentation: 'modal'}}>
-        <Stack.Screen name="Modal" component={List} />
-      </Stack.Group> */}
     </Stack.Navigator>
   );
 }
