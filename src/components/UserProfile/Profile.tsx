@@ -7,31 +7,17 @@ import InfoBox from '../common/InfoBox/InfoBox';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../router/RootNavigation';
 import {RouteProp} from '@react-navigation/native';
+import {IProfile} from '../../libs/interfaces/Profile';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'UserProfile'>;
   route: RouteProp<RootStackParamList, 'UserProfile'>;
 }
 
-interface IProfile {
-  name: string;
-  contact: {
-    email: string;
-    phone_number: string;
-    github: string;
-  };
-  award: string[];
-  certificate: string[];
-  skills: string[];
-  schools: string[];
-  profile_image_url: string;
-}
-
 const UserProfile = ({navigation, route}: Props) => {
   const [data, setData] = useState<IProfile | any>();
 
   useEffect(() => {
-    console.log(route.params.uid);
     getUser(route.params.uid).then((response: any) => {
       if (!response) {
         return navigation.navigate('Home');
