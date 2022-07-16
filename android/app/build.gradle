@@ -1,7 +1,8 @@
 apply plugin: "com.android.application"
-apply plugin: "com.google.gms.google-services" 
+apply plugin: "com.google.gms.google-services"
 
 import com.android.build.OutputFile
+import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -140,7 +141,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -153,13 +153,17 @@ android {
                         "GENERATED_SRC_DIR=$buildDir/generated/source",
                         "PROJECT_BUILD_DIR=$buildDir",
                         "REACT_ANDROID_DIR=$rootDir/../node_modules/react-native/ReactAndroid",
-                        "REACT_ANDROID_BUILD_DIR=$rootDir/../node_modules/react-native/ReactAndroid/build",
-                        "NODE_MODULES_DIR=$rootDir/../node_modules"
+                        "REACT_ANDROID_BUILD_DIR=$rootDir/../node_modules/react-native/ReactAndroid/build"
                     cFlags "-Wall", "-Werror", "-fexceptions", "-frtti", "-DWITH_INSPECTOR=1"
                     cppFlags "-std=c++17"
                     // Make sure this target name is the same you specify inside the
                     // src/main/jni/Android.mk file for the `LOCAL_MODULE` variable.
                     targets "whoareyou_appmodules"
+
+                    // Fix for windows limit on number of character in file paths and in command lines
+                    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                        arguments "NDK_APP_SHORT_COMMANDS=true"
+                    }
                 }
             }
             if (!enableSeparateBuildPerCPUArchitecture) {
@@ -258,11 +262,6 @@ android {
 }
 
 dependencies {
-
-    implementation platform('com.google.firebase:firebase-bom:29.1.0') // 추가 (line:221)
-    implementation "com.google.firebase:firebase-analytics" // 추가 (line:222)
-
-    implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
@@ -284,13 +283,14 @@ dependencies {
     }
 
     if (enableHermes) {
-        //noinspection GradleDynamicVersion
-        implementation("com.facebook.react:hermes-engine:+") { // From node_modules
-            exclude group:'com.facebook.fbjni'
-        }
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
     } else {
         implementation jscFlavor
     }
+
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
 }
 
 if (isNewArchitectureEnabled()) {
@@ -300,11 +300,7 @@ if (isNewArchitectureEnabled()) {
     configurations.all {
         resolutionStrategy.dependencySubstitution {
             substitute(module("com.facebook.react:react-native"))
-                    .using(project(":ReactAndroid"))
-                    .because("On New Architecture we're building React Native from source")
-            substitute(module("com.facebook.react:hermes-engine"))
-                    .using(project(":ReactAndroid:hermes-engine"))
-                    .because("On New Architecture we're building Hermes from source")
+                    .using(project(":ReactAndroid")).because("On New Architecture we're building React Native from source")
         }
     }
 }
