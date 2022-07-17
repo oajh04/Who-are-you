@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
-import DefaultBox from '../common/DefaultBox/DefaultBox';
 
 interface Props {
   image_url: string;
@@ -9,7 +8,6 @@ interface Props {
 }
 
 const UserCard = ({image_url, name, email}: Props) => {
-  console.log(image_url);
   return (
     <View style={styles.wrapper}>
       <Text style={{marginRight: 10}}>
