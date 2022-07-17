@@ -1,144 +1,148 @@
-/* eslint-disable no-extend-native */
+import {RouteProp} from '@react-navigation/native';
+// import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
+import {RootStackParamList} from '../../router/RootNavigation';
+import firestore from '@react-native-firebase/firestore';
 import {
-  View,
+  Dimensions,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
+  ScrollView,
   Text,
+  View,
 } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import DateFormat from '../../libs/functions/DateFormat';
+import DefaultBox from '../common/DefaultBox/DefaultBox';
+import {useToast} from 'react-native-toast-notifications';
+import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
+import {IProjectCreate} from '../../libs/interfaces/Project';
 
-export default function Home() {
-  DateFormat();
+interface Props {
+  navigation: any;
+  route: RouteProp<RootStackParamList, 'CreateProfile'>;
+}
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState('');
-  const [text, setText] = useState('');
-
-  const [inputs, setInputs] = useState({
+const CreateProject = ({navigation, route}: Props) => {
+  const toast = useToast();
+  const userCollection = firestore().collection('user');
+  const [topic, setTopic] = useState<any>('');
+  const [data, setData] = useState<any | IProjectCreate>({
     name: '',
-    nickname: '',
     start_at: '',
     end_at: '',
-    skills: [''],
+    description: '',
+    image_url: [],
+    user_id: '',
+    skills: [],
   });
 
-  const {name, nickname, start_at, end_at, skills} = inputs;
-
-  const showDatePicker = (keyvalue: string) => {
-    setDatePickerVisibility(keyvalue);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility('');
-  };
-
-  const handleConfirm = (keyvalue: string, date: any) => {
-    hideDatePicker();
-    setInputs({
-      ...inputs,
-      [keyvalue]: date.format('yyyy-MM-dd'),
-    });
-  };
-
-  const changeSkills = (e: any) => {
-    setText(e);
-  };
-  const changeSkillss = (e: any) => {
-    console.log(e.nativeEvent.key);
-    if (e.nativeEvent.key === ' ') {
-      setInputs({
-        ...inputs,
-        skills: [...skills, text],
+  const onSend = async () => {
+    try {
+      await userCollection.doc(route.params.uid).set(data);
+      toast.show('프로젝트 추가 성공', {
+        type: 'success',
       });
-      setText('');
+      navigation.navigate('Home');
+    } catch (error: any) {
+      toast.show('프로젝트 추가 실패');
     }
   };
 
   const onChange = (keyvalue: string, e: string) => {
-    setInputs({
-      ...inputs,
+    setData({
+      ...data,
       [keyvalue]: e,
     });
   };
 
+  const onChangeArray = (keyvalue: string, e: string) => {
+    setTopic(e);
+  };
+
+  const onKeyInput = (keyvalue: string, e: any) => {
+    if (topic === ',') {
+      return;
+    }
+
+    if (e.nativeEvent.key === ',') {
+      setData({
+        ...data,
+        [keyvalue]: [...data[keyvalue], topic.replace(/,$/, '')],
+      });
+      setTopic('');
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      {skills.map((i, index) => {
-        return <Text key={index}>{i}</Text>;
-      })}
-      <TextInput
-        style={styles.textInput}
-        onChangeText={e => onChange('name', e)}
-        value={name}
-      />
-      <TextInput
-        style={styles.textInput}
-        onChangeText={e => onChange('nickname', e)}
-        value={nickname}
-      />
-      <TextInput
-        placeholder="Skills"
-        style={styles.textInput}
-        placeholderTextColor="#000000"
-        onChangeText={changeSkills}
-        onKeyPress={changeSkillss}
-        value={text}
-      />
-      <TouchableOpacity onPress={() => showDatePicker('start_at')}>
-        <TextInput
-          pointerEvents="none"
-          style={styles.textInput}
-          placeholder={'시작 날짜'}
-          placeholderTextColor="#000000"
-          underlineColorAndroid="transparent"
-          editable={false}
-          value={start_at}
-        />
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible === 'start_at'}
-          mode="date"
-          onConfirm={e => handleConfirm('start_at', e)}
-          onCancel={hideDatePicker}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => showDatePicker('end_at')}>
-        <TextInput
-          pointerEvents="none"
-          style={styles.textInput}
-          placeholder={'마감 날짜'}
-          placeholderTextColor="#000000"
-          underlineColorAndroid="transparent"
-          editable={false}
-          value={end_at}
-        />
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible === 'end_at'}
-          mode="date"
-          onConfirm={e => handleConfirm('end_at', e)}
-          onCancel={hideDatePicker}
-        />
-      </TouchableOpacity>
-    </View>
+    <>
+      <ScrollView>
+        <DefaultBox name="기본 정보">
+          <TextInput
+            placeholder="프로젝트 이름"
+            onChangeText={e => onChange('name', e)}
+            value={data.name}
+          />
+        </DefaultBox>
+        <DefaultBox name="프로젝트 설명">
+          <TextInput
+            placeholder="프로젝트 설명"
+            onChangeText={e => onChangeArray('description', e)}
+          />
+        </DefaultBox>
+        <DefaultBox name="스킬">
+          <View style={styles.skillBox}>
+            {data.skills.map((i: string, index: number) => {
+              return <SkillCard key={`${i}-${index}`}>{i}</SkillCard>;
+            })}
+          </View>
+          <TextInput
+            value={topic}
+            placeholder="내용을 입력 후 ,를 입력해보세요 "
+            onChangeText={e => onChangeArray('skills', e)}
+            onKeyPress={e => onKeyInput('skills', e)}
+          />
+        </DefaultBox>
+        <DefaultBox name="프로젝트 사진">
+          <TextInput
+            placeholder="내용을 입력 후 ,를 입력해보세요"
+            onChangeText={e => onChangeArray('start_at', e)}
+          />
+        </DefaultBox>
+      </ScrollView>
+      <Text style={styles.endButton} onPress={onSend}>
+        입력 완료
+      </Text>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  textInput: {
-    fontSize: 16,
-    color: '#000000',
-    height: 50,
-    width: 300,
-    borderColor: '#000000',
+  input: {
+    borderColor: '#34C557',
     borderWidth: 1,
-    borderRadius: 12,
     padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  endButton: {
+    margin: 15,
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#34C557',
+    color: 'white',
+    width: Dimensions.get('window').width - 30,
+    textAlign: 'center',
+  },
+  skillBox: {
+    width: '100%',
+    flexWrap: 'wrap',
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
+
+export default CreateProject;
