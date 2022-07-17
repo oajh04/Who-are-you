@@ -5,12 +5,14 @@ export interface IProjectInfo {
   end_at: string;
   description: string;
   image_url: string[];
+  user_id: string;
 }
 
-export interface ProjectList {
+export interface IProjectCreate {
   name: string;
-  id: string;
   start_at: string;
   end_at: string;
   description: string;
+  image_url: string[];
+  user_id: string;
 }
