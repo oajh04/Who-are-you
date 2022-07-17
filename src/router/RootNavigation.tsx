@@ -6,6 +6,7 @@ import Login from '../components/Login/Login';
 import Register from '../components/Register/Register';
 import CreateProfile from '../components/CreateProfile/CreateProfile';
 import UserProfile from '../components/UserProfile/Profile';
+import CreateProject from '../components/CreateProject/CreateProject';
 
 export type RootStackParamList = {
   Root: undefined;
@@ -14,6 +15,7 @@ export type RootStackParamList = {
   Register: undefined;
   CreateProfile: {uid: string};
   UserProfile: {uid: string};
+  CreateProject: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +33,13 @@ export default function RootNavigator() {
       <Stack.Screen
         name="ProjectInfo"
         component={ProjectInfo}
+        options={{
+          title: '프로젝트',
+        }}
+      />
+      <Stack.Screen
+        name="CreateProject"
+        component={CreateProject}
         options={{
           title: '프로젝트',
         }}

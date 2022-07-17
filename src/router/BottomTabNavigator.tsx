@@ -2,7 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Profile from '../components/Profile/Profile';
 import PortFolio from '../components/PortFolio/PortFolio';
-import {HomeSVG, LogOutSVG, PortfolioSVG, ProfileSVG} from '../assets';
+import {HomeSVG, LogOutSVG, PlusSVG, PortfolioSVG, ProfileSVG} from '../assets';
 import Home from '../components/Home/Home';
 import {Text} from 'react-native';
 import {setUId} from '../libs/functions/idManagement';
@@ -19,6 +19,10 @@ const BottomTabNavigator = ({navigation}: any) => {
   const onLogOut = () => {
     setUId('');
     navigation.navigate('Login');
+  };
+
+  const onCreateProject = () => {
+    navigation.navigate('CreateProject');
   };
 
   return (
@@ -43,6 +47,11 @@ const BottomTabNavigator = ({navigation}: any) => {
             tabBarIcon: () => {
               return <PortfolioSVG />;
             },
+            headerRight: () => (
+              <Text style={{marginRight: 15}} onPress={onCreateProject}>
+                <PlusSVG />
+              </Text>
+            ),
           }}
         />
         <Tab.Screen
