@@ -45,7 +45,6 @@ const CreateProfile = ({navigation, route}: Props) => {
 
   const onSend = async () => {
     try {
-      console.log(route.params.uid);
       await userCollection.doc(route.params.uid).set(data);
       toast.show('프로필 등록 성공', {
         type: 'success',
@@ -84,7 +83,6 @@ const CreateProfile = ({navigation, route}: Props) => {
     console.log(e.nativeEvent.key, topic[keyvalue]);
 
     if (topic[keyvalue] === ',') {
-      console.log('asd');
       return;
     }
 
@@ -133,7 +131,7 @@ const CreateProfile = ({navigation, route}: Props) => {
           </View>
           <TextInput
             value={topic.schools}
-            placeholder="ex) 대덕소프트웨어마이스터고등학교 재학중"
+            placeholder="내용을 입력 후 ,를 입력해보세요"
             onChangeText={e => onChangeArray('schools', e)}
             onKeyPress={e => onKeyInput('schools', e)}
           />
@@ -146,7 +144,7 @@ const CreateProfile = ({navigation, route}: Props) => {
           </View>
           <TextInput
             value={topic.skills}
-            placeholder="ex) 대덕소프트웨어마이스터고등학교 재학중"
+            placeholder="내용을 입력 후 ,를 입력해보세요"
             onChangeText={e => onChangeArray('skills', e)}
             onKeyPress={e => onKeyInput('skills', e)}
           />
@@ -159,7 +157,7 @@ const CreateProfile = ({navigation, route}: Props) => {
           </View>
           <TextInput
             value={topic.award}
-            placeholder="ex) 대덕소프트웨어마이스터고등학교 재학중"
+            placeholder="내용을 입력 후 ,를 입력해보세요"
             onChangeText={e => onChangeArray('award', e)}
             onKeyPress={e => onKeyInput('award', e)}
           />
@@ -172,7 +170,7 @@ const CreateProfile = ({navigation, route}: Props) => {
           </View>
           <TextInput
             value={topic.certificate}
-            placeholder="ex) 대덕소프트웨어마이스터고등학교 재학중"
+            placeholder="내용을 입력 후 ,를 입력해보세요"
             onChangeText={e => onChangeArray('certificate', e)}
             onKeyPress={e => onKeyInput('certificate', e)}
           />
@@ -200,6 +198,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderRadius: 10,
     display: 'flex',
+    overflow: 'hidden',
     alignItems: 'center',
     backgroundColor: '#34C557',
     color: 'white',
