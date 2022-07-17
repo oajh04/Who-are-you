@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   loginButton: {
     position: 'absolute',
     left: 15,
+    overflow: 'hidden',
     bottom: 15,
     paddingTop: 15,
     paddingBottom: 15,
