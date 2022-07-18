@@ -1,12 +1,18 @@
 import {useIsFocused} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, ScrollView} from 'react-native';
 import {getUserList} from '../../libs/apis/user';
 import {IProfile} from '../../libs/interfaces/Profile';
+import {RootStackParamList} from '../../router/RootNavigation';
 import UserCard from './UserCard';
 
-const Home = ({navigation}: any) => {
-  const [data, setData] = useState<any | IProfile[]>([]);
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
+}
+
+const Home = ({navigation}: Props) => {
+  const [data, setData] = useState<IProfile[]>([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
