@@ -6,11 +6,7 @@ interface IPage {
 }
 
 const Page = ({item}: IPage) => {
-  return (
-    // <View >
-    <Image source={{uri: item}} style={styles.wrapper} />
-    // </View>
-  );
+  return <Image source={{uri: item}} style={styles.wrapper} />;
 };
 
 const styles = StyleSheet.create({
