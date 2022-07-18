@@ -21,6 +21,27 @@ import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {StackNavigationProp} from '@react-navigation/stack';
 
+interface ITopic {
+  award: string;
+  certificate: string;
+  skills: string;
+  schools: string;
+}
+
+interface ICreateProfile {
+  name: string;
+  contact: {
+    email: string;
+    phone_number: string;
+    github: string;
+  };
+  award: string[];
+  certificate: string[];
+  skills: string[];
+  schools: string[];
+  profile_image_url: string;
+}
+
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'CreateProfile'>;
   route: RouteProp<RootStackParamList, 'CreateProfile'>;
@@ -30,13 +51,13 @@ const profileUrl =
 const CreateProfile = ({navigation, route}: Props) => {
   const toast = useToast();
   const userCollection = firestore().collection('user');
-  const [topic, setTopic] = useState<any>({
+  const [topic, setTopic] = useState<ITopic | any>({
     award: '',
     certificate: '',
     skills: '',
     schools: '',
   });
-  const [data, setData] = useState<any>({
+  const [data, setData] = useState<ICreateProfile | any>({
     name: '',
     contact: {
       email: '',
