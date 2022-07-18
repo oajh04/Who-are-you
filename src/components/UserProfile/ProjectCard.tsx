@@ -10,7 +10,7 @@ interface Props {
 
 const ProjectCard = ({name, description, start_at, end_at}: Props) => {
   return (
-    <View>
+    <View style={styles.wrapper}>
       <Text style={styles.description}>{name}</Text>
       <Text style={styles.description}>{description}</Text>
       <Text>
@@ -21,6 +21,11 @@ const ProjectCard = ({name, description, start_at, end_at}: Props) => {
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 5,
+  },
   description: {
     width: '100%',
     flexWrap: 'nowrap',
