@@ -72,7 +72,7 @@ const UserProfile = ({navigation, route}: Props) => {
 
             {projectData.length !== 0 && (
               <DefaultBox name="Projects">
-                {projectData.map((i: any) => {
+                {projectData.map((i: IProjectInfo) => {
                   return (
                     <TouchableOpacity
                       key={i.id}
