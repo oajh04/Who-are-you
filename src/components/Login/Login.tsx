@@ -39,9 +39,15 @@ const Login = ({navigation}: any) => {
       console.log(e);
       switch (e.code) {
         case 'auth/user-not-found':
-          return console.log('입력한 아이디가 존재하지 않습니다');
+          return toast.show('입력한 아이디가 존재하지 않습니다', {
+            type: 'danger',
+            duration: 2000,
+          });
         case 'auth/wrong-password':
-          return console.log('비밀번호를 틀렸습니다.');
+          return toast.show('비밀번호를 틀렸습니다.', {
+            type: 'danger',
+            duration: 2000,
+          });
       }
     }
   };
