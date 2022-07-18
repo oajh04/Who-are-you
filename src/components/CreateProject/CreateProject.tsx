@@ -32,7 +32,7 @@ const CreateProject = ({navigation}: Props) => {
   DateFormat();
   const toast = useToast();
   const projectCollection = firestore().collection('projectList');
-  const [topic, setTopic] = useState<any>('');
+  const [topic, setTopic] = useState<string>('');
   const [data, setData] = useState<any | IProjectCreate>({
     name: '',
     start_at: '',
@@ -204,7 +204,6 @@ const CreateProject = ({navigation}: Props) => {
           <Text onPress={onSelectImage}>사진 추가하기</Text>
           <Slider
             gap={10}
-            offset={36}
             pages={data.image_arr}
             pageWidth={Dimensions.get('window').width - 52 * 2}
           />
