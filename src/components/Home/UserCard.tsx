@@ -10,16 +10,12 @@ interface Props {
 const UserCard = ({image_url, name, email}: Props) => {
   return (
     <View style={styles.wrapper}>
-      <Text style={{marginRight: 10}}>
-        {image_url && (
-          <Image
-            source={{
-              uri: image_url,
-            }}
-            style={styles.image}
-          />
-        )}
-      </Text>
+      <Image
+        source={{
+          uri: image_url,
+        }}
+        style={styles.image}
+      />
       <View>
         <Text style={{marginBottom: 5}}>{name}</Text>
         <Text>{email}</Text>
@@ -43,6 +39,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    marginRight: 10,
+    overflow: 'hidden',
   },
 });
 
