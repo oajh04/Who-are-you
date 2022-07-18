@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {RouteProp} from '@react-navigation/native';
 import storage from '@react-native-firebase/storage';
 import React, {useState} from 'react';
@@ -18,9 +19,10 @@ import DefaultBox from '../common/DefaultBox/DefaultBox';
 import {useToast} from 'react-native-toast-notifications';
 import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 interface Props {
-  navigation: any;
+  navigation: StackNavigationProp<RootStackParamList, 'CreateProfile'>;
   route: RouteProp<RootStackParamList, 'CreateProfile'>;
 }
 const profileUrl =
