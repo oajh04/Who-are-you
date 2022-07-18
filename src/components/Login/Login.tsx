@@ -4,8 +4,14 @@ import {signIn} from '../../libs/apis/auth';
 import {setUId} from '../../libs/functions/idManagement';
 import {useToast} from 'react-native-toast-notifications';
 import {getUser} from '../../libs/apis/user';
+import {RootStackParamList} from '../../router/RootNavigation';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-const Login = ({navigation}: any) => {
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+}
+
+const Login = ({navigation}: Props) => {
   const toast = useToast();
   const [info, setInfo] = useState<{email: string; password: string}>({
     email: '',
