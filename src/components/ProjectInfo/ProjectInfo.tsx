@@ -7,6 +7,7 @@ import Description from './Description/Description';
 import ProjectTitle from './ProjectTitle/ProjectTitle';
 import SkillBox from './SkillBox/SkillBox';
 import {getProject} from '../../libs/apis/project';
+import {IProjectInfo} from '../../libs/interfaces/Project';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'ProjectInfo'>;
@@ -14,8 +15,9 @@ interface Props {
 }
 
 const ProjectInfo = ({navigation, route}: Props) => {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<any | IProjectInfo>({});
   const {name, start_at, end_at, description, image_arr, skills} = data;
+
   useEffect(() => {
     navigation.setOptions({title: 'Pick'});
     getProject(route.params.id).then(res => setData(res));
