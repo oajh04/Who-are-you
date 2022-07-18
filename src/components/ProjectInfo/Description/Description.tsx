@@ -14,12 +14,7 @@ const Description = ({description, image_arr}: Props) => {
   return (
     <DefaultBox name="Content">
       <View>
-        <Slider
-          gap={10}
-          offset={36}
-          pages={image_arr}
-          pageWidth={screenWidth - (16 + 36) * 2}
-        />
+        <Slider gap={10} pages={image_arr} pageWidth={screenWidth - 52 * 2} />
         <Text>{description}</Text>
       </View>
     </DefaultBox>

@@ -6,12 +6,11 @@ import Page from './Page';
 
 interface ICarousel {
   gap: number;
-  offset: number;
   pages: any[];
   pageWidth: number;
 }
 
-const Slider = ({pages, pageWidth, gap, offset}: ICarousel) => {
+const Slider = ({pages, pageWidth, gap}: ICarousel) => {
   function renderItem({item}: any) {
     return <Page item={item} key={item} />;
   }
