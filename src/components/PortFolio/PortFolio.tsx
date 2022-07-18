@@ -5,6 +5,7 @@ import {RootStackParamList} from '../../router/RootNavigation';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {getProjectList} from '../../libs/apis/project';
 import {getUId} from '../../libs/functions/idManagement';
+import {useIsFocused} from '@react-navigation/native';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'Root'>;
@@ -12,6 +13,7 @@ interface Props {
 
 const PortFolio = ({navigation}: Props) => {
   const [data, setData] = useState<any>([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getUId().then(response => {
@@ -21,7 +23,7 @@ const PortFolio = ({navigation}: Props) => {
         });
       }
     });
-  }, []);
+  }, [isFocused]);
 
   return (
     <View>
