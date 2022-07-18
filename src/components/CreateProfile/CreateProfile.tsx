@@ -1,5 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
-// import {StackNavigationProp} from '@react-navigation/stack';
+import storage from '@react-native-firebase/storage';
 import React, {useState} from 'react';
 import {RootStackParamList} from '../../router/RootNavigation';
 import firestore from '@react-native-firebase/firestore';
@@ -10,16 +10,21 @@ import {
   ScrollView,
   Text,
   View,
+  Pressable,
+  Platform,
+  Image,
 } from 'react-native';
 import DefaultBox from '../common/DefaultBox/DefaultBox';
 import {useToast} from 'react-native-toast-notifications';
 import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 interface Props {
   navigation: any;
   route: RouteProp<RootStackParamList, 'CreateProfile'>;
 }
-
+const profileUrl =
+  'https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';
 const CreateProfile = ({navigation, route}: Props) => {
   const toast = useToast();
   const userCollection = firestore().collection('user');
@@ -40,7 +45,7 @@ const CreateProfile = ({navigation, route}: Props) => {
     certificate: [],
     skills: [],
     schools: [],
-    profile_image_url: '',
+    profile_image_url: profileUrl,
   });
 
   const onSend = async () => {
@@ -112,30 +117,80 @@ const CreateProfile = ({navigation, route}: Props) => {
     }
   };
 
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        if (res.didCancel) return;
+        imageUpload(res);
+      },
+    );
+  };
+
+  const imageUpload = async (response: any) => {
+    let imageUrl = null;
+    if (response) {
+      const asset = response.assets[0];
+      const reference = storage().ref(`/profile/${asset.fileName}`); // 업로드할 경로 지정
+      if (Platform.OS === 'android') {
+        await reference.putString(asset.base64, 'base64', {
+          contentType: asset.type,
+        });
+      } else {
+        await reference.putFile(asset.uri);
+      }
+      imageUrl = response ? await reference.getDownloadURL() : null;
+    }
+    setData({
+      ...data,
+      profile_image_url: imageUrl,
+    });
+  };
+
   return (
     <>
       <ScrollView>
         <DefaultBox name="정보">
-          <TextInput
-            placeholder="이름"
-            onChangeText={e => onChange('name', e)}
-            value={data.name}
-          />
-          <TextInput
-            placeholder="이메일"
-            onChangeText={e => onChangeContact('email', e)}
-            value={data.contact.email}
-          />
-          <TextInput
-            placeholder="전화번호"
-            onChangeText={e => onChangeContact('phone_number', e)}
-            value={data.contact.phone_number}
-          />
-          <TextInput
-            placeholder="깃허브"
-            onChangeText={e => onChangeContact('github', e)}
-            value={data.contact.github}
-          />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <View style={{display: 'flex', flexDirection: 'column'}}>
+              <TextInput
+                placeholder="이름"
+                onChangeText={e => onChange('name', e)}
+                value={data.name}
+              />
+              <TextInput
+                placeholder="이메일"
+                onChangeText={e => onChangeContact('email', e)}
+                value={data.contact.email}
+              />
+              <TextInput
+                placeholder="전화번호"
+                onChangeText={e => onChangeContact('phone_number', e)}
+                value={data.contact.phone_number}
+              />
+              <TextInput
+                placeholder="깃허브"
+                onChangeText={e => onChangeContact('github', e)}
+                value={data.contact.github}
+              />
+            </View>
+            <Pressable onPress={onSelectImage}>
+              <Image
+                style={styles.circle}
+                source={{uri: data?.profile_image_url}}
+              />
+            </Pressable>
+          </View>
         </DefaultBox>
         <DefaultBox name="학력">
           <View>
@@ -224,6 +279,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     display: 'flex',
     flexDirection: 'row',
+  },
+  circle: {
+    width: 70,
+    height: 70,
+    backgroundColor: 'gray',
+    borderRadius: 35,
+    overflow: 'hidden',
   },
 });
 
