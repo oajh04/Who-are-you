@@ -43,7 +43,7 @@ const Profile = ({navigation}: Props) => {
       if (!res) {
         return navigation.navigate('Login');
       } else {
-        getUser(res).then((response: any) => {
+        getUser(res).then((response: string | any) => {
           if (!response) {
             return navigation.navigate('Login');
           }
