@@ -5,7 +5,10 @@ import {ToastProvider} from 'react-native-toast-notifications';
 
 const App = () => {
   return (
-    <ToastProvider placement="bottom">
+    <ToastProvider
+      placement="bottom"
+      animationType="slide-in"
+      offsetBottom={40}>
       <Navigation />
     </ToastProvider>
   );
