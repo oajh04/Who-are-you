@@ -10,6 +10,7 @@ import {
   ScrollView,
   Text,
   View,
+  SafeAreaView,
 } from 'react-native';
 import DefaultBox from '../common/DefaultBox/DefaultBox';
 import {useToast} from 'react-native-toast-notifications';
@@ -36,6 +37,15 @@ const CreateProject = ({navigation, route}: Props) => {
   });
 
   const onSend = async () => {
+    for (let variable in data) {
+      if (!data[variable] || data[variable].length === 0) {
+        return toast.show('빈칸을 다 채워주세요', {
+          type: 'danger',
+          duration: 1000,
+        });
+      }
+    }
+
     try {
       await userCollection.doc(route.params.uid).set(data);
       toast.show('프로젝트 추가 성공', {
@@ -73,7 +83,7 @@ const CreateProject = ({navigation, route}: Props) => {
   };
 
   return (
-    <>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <DefaultBox name="기본 정보">
           <TextInput
@@ -111,7 +121,7 @@ const CreateProject = ({navigation, route}: Props) => {
       <Text style={styles.endButton} onPress={onSend}>
         입력 완료
       </Text>
-    </>
+    </SafeAreaView>
   );
 };
 
