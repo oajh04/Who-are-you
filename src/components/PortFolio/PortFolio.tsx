@@ -6,13 +6,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {getProjectList} from '../../libs/apis/project';
 import {getUId} from '../../libs/functions/idManagement';
 import {useIsFocused} from '@react-navigation/native';
+import {IProjectInfo} from '../../libs/interfaces/Project';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'Root'>;
 }
 
 const PortFolio = ({navigation}: Props) => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<IProjectInfo[]>([]);
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const PortFolio = ({navigation}: Props) => {
   return (
     <View>
       <ScrollView>
-        {data.map((i: any) => {
+        {data.map((i: IProjectInfo) => {
           return (
             <TouchableOpacity
               key={i.id}
