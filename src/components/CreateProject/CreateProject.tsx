@@ -1,8 +1,8 @@
-import {RouteProp} from '@react-navigation/native';
-// import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {RootStackParamList} from '../../router/RootNavigation';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import {
   Dimensions,
   StyleSheet,
@@ -11,30 +11,62 @@ import {
   Text,
   View,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import DefaultBox from '../common/DefaultBox/DefaultBox';
 import {useToast} from 'react-native-toast-notifications';
 import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
 import {IProjectCreate} from '../../libs/interfaces/Project';
+import Slider from '../ProjectInfo/Description/Slider/Slider';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {getUId} from '../../libs/functions/idManagement';
+import {StackNavigationProp} from '@react-navigation/stack';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateFormat from '../../libs/functions/DateFormat';
 
 interface Props {
-  navigation: any;
-  route: RouteProp<RootStackParamList, 'CreateProfile'>;
+  navigation: StackNavigationProp<RootStackParamList, 'CreateProject'>;
 }
 
-const CreateProject = ({navigation, route}: Props) => {
+const CreateProject = ({navigation}: Props) => {
+  DateFormat();
   const toast = useToast();
-  const userCollection = firestore().collection('user');
+  const projectCollection = firestore().collection('projectList');
   const [topic, setTopic] = useState<any>('');
   const [data, setData] = useState<any | IProjectCreate>({
     name: '',
     start_at: '',
     end_at: '',
     description: '',
-    image_url: [],
+    image_arr: [],
     user_id: '',
     skills: [],
   });
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState('');
+
+  const showDatePicker = (isShow: string) => {
+    setDatePickerVisibility(isShow);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility('');
+  };
+
+  const handleConfirm = (keyvalue: string, date: any) => {
+    console.log(date);
+    setData({
+      ...data,
+      [keyvalue]: date.format('yyyy-MM-dd'),
+    });
+    hideDatePicker();
+  };
+
+  useEffect(() => {
+    getUId()
+      .then(res => setData({...data, user_id: res}))
+      .catch(e => console.log(e));
+  }, []);
 
   const onSend = async () => {
     for (let variable in data) {
@@ -47,11 +79,11 @@ const CreateProject = ({navigation, route}: Props) => {
     }
 
     try {
-      await userCollection.doc(route.params.uid).set(data);
+      await projectCollection.doc().set(data);
       toast.show('프로젝트 추가 성공', {
         type: 'success',
       });
-      navigation.navigate('Home');
+      navigation.navigate('PortFolio');
     } catch (error: any) {
       toast.show('프로젝트 추가 실패');
     }
@@ -64,7 +96,7 @@ const CreateProject = ({navigation, route}: Props) => {
     });
   };
 
-  const onChangeArray = (keyvalue: string, e: string) => {
+  const onChangeArray = (e: string) => {
     setTopic(e);
   };
 
@@ -82,20 +114,77 @@ const CreateProject = ({navigation, route}: Props) => {
     }
   };
 
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        if (res.didCancel) return;
+        imageUpload(res);
+      },
+    );
+  };
+
+  const imageUpload = async (response: any) => {
+    let imageUrl = null;
+    if (response) {
+      const asset = response.assets[0];
+      const reference = storage().ref(`/profile/${asset.fileName}`); // 업로드할 경로 지정
+      if (Platform.OS === 'android') {
+        await reference.putString(asset.base64, 'base64', {
+          contentType: asset.type,
+        });
+      } else {
+        await reference.putFile(asset.uri);
+      }
+      imageUrl = response ? await reference.getDownloadURL() : null;
+    }
+    setData({
+      ...data,
+      image_arr: [...data.image_arr, imageUrl],
+    });
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible === 'start_at'}
+          mode="date"
+          onConfirm={date => handleConfirm('start_at', date)}
+          onCancel={hideDatePicker}
+        />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible === 'end_at'}
+          mode="date"
+          onConfirm={date => handleConfirm('end_at', date)}
+          onCancel={hideDatePicker}
+        />
         <DefaultBox name="기본 정보">
           <TextInput
             placeholder="프로젝트 이름"
             onChangeText={e => onChange('name', e)}
             value={data.name}
           />
+          <Text style={{marginTop: 7}}>
+            <Text onPress={() => showDatePicker('start_at')}>
+              {data.start_at ? data.start_at : '시작 날짜'}
+            </Text>
+            ~
+            <Text onPress={() => showDatePicker('end_at')}>
+              {data.end_at ? data.end_at : '마감 날짜'}
+            </Text>
+          </Text>
         </DefaultBox>
         <DefaultBox name="프로젝트 설명">
           <TextInput
             placeholder="프로젝트 설명"
-            onChangeText={e => onChangeArray('description', e)}
+            value={data.description}
+            onChangeText={e => onChange('description', e)}
           />
         </DefaultBox>
         <DefaultBox name="스킬">
@@ -107,14 +196,17 @@ const CreateProject = ({navigation, route}: Props) => {
           <TextInput
             value={topic}
             placeholder="내용을 입력 후 ,를 입력해보세요 "
-            onChangeText={e => onChangeArray('skills', e)}
+            onChangeText={e => onChangeArray(e)}
             onKeyPress={e => onKeyInput('skills', e)}
           />
         </DefaultBox>
         <DefaultBox name="프로젝트 사진">
-          <TextInput
-            placeholder="내용을 입력 후 ,를 입력해보세요"
-            onChangeText={e => onChangeArray('start_at', e)}
+          <Text onPress={onSelectImage}>사진 추가하기</Text>
+          <Slider
+            gap={10}
+            offset={36}
+            pages={data.image_arr}
+            pageWidth={Dimensions.get('window').width - 52 * 2}
           />
         </DefaultBox>
       </ScrollView>
