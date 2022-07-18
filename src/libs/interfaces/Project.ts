@@ -4,7 +4,7 @@ export interface IProjectInfo {
   start_at: string;
   end_at: string;
   description: string;
-  image_url: string[];
+  image_arr: string[];
   user_id: string;
 }
 
@@ -13,6 +13,6 @@ export interface IProjectCreate {
   start_at: string;
   end_at: string;
   description: string;
-  image_url: string[];
+  image_arr: string[];
   user_id: string;
 }
