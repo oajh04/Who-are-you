@@ -36,17 +36,22 @@ const Register = ({navigation}: Props) => {
         }
       })
       .catch(err => {
-        console.log(err);
         switch (err.code) {
           case 'auth/weak-password':
-            console.log('비밀번호는 6자리 이상이어야 합니다');
-            break;
+            return toast.show('비밀번호는 6자리 이상이어야 합니다', {
+              type: 'danger',
+              duration: 2000,
+            });
           case 'auth/invalid-email':
-            console.log('잘못된 이메일 주소입니다');
-            break;
+            return toast.show('잘못된 이메일 주소입니다', {
+              type: 'danger',
+              duration: 2000,
+            });
           case 'auth/email-already-in-use':
-            console.log('이미 가입되어 있는 계정입니다');
-            break;
+            return toast.show('이미 가입되어 있는 계정입니다', {
+              type: 'danger',
+              duration: 2000,
+            });
         }
       });
   };
