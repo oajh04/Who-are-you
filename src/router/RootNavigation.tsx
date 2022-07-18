@@ -1,14 +1,14 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ProjectInfo from '../components/ProjectInfo/ProjectInfo';
-import BottomTabNavigator from './BottomTabNavigator';
+import BottomTabNavigator, {BottomTabParamList} from './BottomTabNavigator';
 import Login from '../components/Login/Login';
 import Register from '../components/Register/Register';
 import CreateProfile from '../components/CreateProfile/CreateProfile';
 import UserProfile from '../components/UserProfile/Profile';
 import CreateProject from '../components/CreateProject/CreateProject';
 
-export type RootStackParamList = {
+export type RootStackParamList = BottomTabParamList & {
   Root: undefined;
   ProjectInfo: {id: string};
   Login: undefined;
