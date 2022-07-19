@@ -2,10 +2,6 @@ import firestore from '@react-native-firebase/firestore';
 
 export const projectCollection = firestore().collection('projectList');
 
-export function createUser(data: any) {
-  return projectCollection.doc().set(data);
-}
-
 export async function getProject(id: string) {
   const doc = await projectCollection.doc(id).get();
   return doc.data();
