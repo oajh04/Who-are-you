@@ -129,20 +129,19 @@ const UpdateProfile = ({navigation, route}: Props) => {
   };
 
   const onKeyInput = (keyvalue: string, e: any) => {
-    console.log(e.nativeEvent.key, topic[keyvalue]);
-
     if (topic[keyvalue] === ',') {
       return;
     }
 
     if (e.nativeEvent.key === ',') {
-      setData({
-        ...data,
-        [keyvalue]: [...data[keyvalue], topic[keyvalue].replace(/,$/, '')],
-      });
+      console.log(topic[keyvalue]);
       setTopic({
         ...topic,
         [keyvalue]: '',
+      });
+      setData({
+        ...data,
+        [keyvalue]: [...data[keyvalue], topic[keyvalue].replace(/,$/, '')],
       });
     }
   };
@@ -228,10 +227,10 @@ const UpdateProfile = ({navigation, route}: Props) => {
         </DefaultBox>
         <DefaultBox name="학력">
           <View style={styles.listBox}>
-            {data.schools.map((i: string) => {
+            {data.schools.map((i: string, index: number) => {
               return (
                 <Pressable
-                  key={i}
+                  key={`${i}-${index}`}
                   onPress={() => deleteArrayIndex('schools', i)}>
                   <Text>{i}</Text>
                 </Pressable>
@@ -247,10 +246,10 @@ const UpdateProfile = ({navigation, route}: Props) => {
         </DefaultBox>
         <DefaultBox name="스킬">
           <View style={styles.skillBox}>
-            {data.skills.map((i: string) => {
+            {data.skills.map((i: string, index: number) => {
               return (
                 <Pressable
-                  key={i}
+                  key={`${i}-${index}`}
                   onPress={() => deleteArrayIndex('skills', i)}>
                   <SkillCard key={i}>{i}</SkillCard>
                 </Pressable>
@@ -266,9 +265,11 @@ const UpdateProfile = ({navigation, route}: Props) => {
         </DefaultBox>
         <DefaultBox name="수상 및 기타 이력">
           <View style={styles.listBox}>
-            {data.award.map((i: string) => {
+            {data.award.map((i: string, index: number) => {
               return (
-                <Pressable key={i} onPress={() => deleteArrayIndex('award', i)}>
+                <Pressable
+                  key={`${i}-${index}`}
+                  onPress={() => deleteArrayIndex('award', i)}>
                   <Text>{i}</Text>
                 </Pressable>
               );
@@ -283,10 +284,10 @@ const UpdateProfile = ({navigation, route}: Props) => {
         </DefaultBox>
         <DefaultBox name="자격증">
           <View style={styles.listBox}>
-            {data.certificate.map((i: string) => {
+            {data.certificate.map((i: string, index: number) => {
               return (
                 <Pressable
-                  key={i}
+                  key={`${i}-${index}`}
                   onPress={() => deleteArrayIndex('certificate', i)}>
                   <Text>{i}</Text>
                 </Pressable>
