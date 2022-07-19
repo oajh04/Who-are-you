@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import DefaultBox from '../../common/DefaultBox/DefaultBox';
 import Slider from './Slider/Slider';
 
@@ -9,12 +9,10 @@ interface Props {
 }
 
 const Description = ({description, image_arr}: Props) => {
-  const screenWidth = Math.round(Dimensions.get('window').width);
-
   return (
     <DefaultBox name="Content">
       <View>
-        <Slider gap={10} pages={image_arr} pageWidth={screenWidth - 52 * 2} />
+        <Slider pages={image_arr} />
         <Text>{description}</Text>
       </View>
     </DefaultBox>
