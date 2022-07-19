@@ -65,11 +65,18 @@ const CreateProject = ({navigation}: Props) => {
 
   useEffect(() => {
     getUId()
-      .then(res => setData({...data, user_id: res}))
+      .then(res => {
+        if (res) {
+          setData({...data, user_id: res});
+        } else {
+          navigation.navigate('Login');
+        }
+      })
       .catch(e => console.log(e));
   }, []);
 
   const onSend = async () => {
+    console.log(data);
     for (let variable in data) {
       if (!data[variable] || data[variable].length === 0) {
         return toast.show('빈칸을 다 채워주세요', {
@@ -197,6 +204,8 @@ const CreateProject = ({navigation}: Props) => {
           <TextInput
             placeholder="프로젝트 설명"
             value={data.description}
+            textAlignVertical="top"
+            multiline={true}
             onChangeText={e => onChange('description', e)}
           />
         </DefaultBox>
@@ -221,11 +230,7 @@ const CreateProject = ({navigation}: Props) => {
         </DefaultBox>
         <DefaultBox name="프로젝트 사진">
           <Text onPress={onSelectImage}>사진 추가하기</Text>
-          <Slider
-            gap={10}
-            pages={data.image_arr}
-            pageWidth={Dimensions.get('window').width - 52 * 2}
-          />
+          <Slider pages={data.image_arr} />
         </DefaultBox>
       </ScrollView>
       <Text style={styles.endButton} onPress={onSend}>
