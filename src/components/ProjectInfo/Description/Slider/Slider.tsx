@@ -5,34 +5,22 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import Page from './Page';
 
 interface ICarousel {
-  gap: number;
   pages: any[];
-  pageWidth: number;
 }
 
-const Slider = ({pages, pageWidth, gap}: ICarousel) => {
+const Slider = ({pages}: ICarousel) => {
   function renderItem({item}: any) {
     return <Page item={item} key={item} />;
   }
 
-  const onScroll = (e: any) => {
-    const newPage = Math.round(
-      e.nativeEvent.contentOffset.x / (pageWidth + gap),
-    );
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
-        automaticallyAdjustContentInsets={false}
         data={pages}
-        decelerationRate="fast"
         horizontal
-        keyExtractor={(item: any, index: number) => `page__${index}`}
-        onScroll={onScroll}
+        keyExtractor={(index: number) => `page_${index}`}
         pagingEnabled
         renderItem={renderItem}
-        snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
       />
     </View>
@@ -41,7 +29,6 @@ const Slider = ({pages, pageWidth, gap}: ICarousel) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '65%',
     justifyContent: 'center',
     alignItems: 'center',
   },
