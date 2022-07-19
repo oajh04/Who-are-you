@@ -97,6 +97,18 @@ const CreateProfile = ({navigation, route}: Props) => {
     }
   };
 
+  const deleteArrayIndex = (keyvalue: string, value: string) => {
+    const index = data[keyvalue].indexOf(value);
+    const array = data[keyvalue].filter((_: string, idx: number) => {
+      return idx !== index;
+    });
+
+    setData({
+      ...data,
+      [keyvalue]: array,
+    });
+  };
+
   const onChange = (keyvalue: string, e: string) => {
     setData({
       ...data,
@@ -218,7 +230,13 @@ const CreateProfile = ({navigation, route}: Props) => {
         <DefaultBox name="학력">
           <View>
             {data.schools.map((i: string) => {
-              return <Text key={i}>{i}</Text>;
+              return (
+                <Pressable
+                  key={i}
+                  onPress={() => deleteArrayIndex('schools', i)}>
+                  <Text>{i}</Text>
+                </Pressable>
+              );
             })}
           </View>
           <TextInput
@@ -231,7 +249,13 @@ const CreateProfile = ({navigation, route}: Props) => {
         <DefaultBox name="스킬">
           <View style={styles.skillBox}>
             {data.skills.map((i: string) => {
-              return <SkillCard key={i}>{i}</SkillCard>;
+              return (
+                <Pressable
+                  key={i}
+                  onPress={() => deleteArrayIndex('skills', i)}>
+                  <SkillCard key={i}>{i}</SkillCard>
+                </Pressable>
+              );
             })}
           </View>
           <TextInput
@@ -244,7 +268,11 @@ const CreateProfile = ({navigation, route}: Props) => {
         <DefaultBox name="수상 및 기타 이력">
           <View style={styles.skillBox}>
             {data.award.map((i: string) => {
-              return <Text key={i}>{i}</Text>;
+              return (
+                <Pressable key={i} onPress={() => deleteArrayIndex('award', i)}>
+                  <Text>{i}</Text>
+                </Pressable>
+              );
             })}
           </View>
           <TextInput
@@ -257,7 +285,13 @@ const CreateProfile = ({navigation, route}: Props) => {
         <DefaultBox name="자격증">
           <View style={styles.skillBox}>
             {data.certificate.map((i: string) => {
-              return <Text key={i}>{i}</Text>;
+              return (
+                <Pressable
+                  key={i}
+                  onPress={() => deleteArrayIndex('certificate', i)}>
+                  <Text>{i}</Text>
+                </Pressable>
+              );
             })}
           </View>
           <TextInput
