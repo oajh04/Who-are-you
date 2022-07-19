@@ -4,7 +4,7 @@ import Profile from '../components/Profile/Profile';
 import PortFolio from '../components/PortFolio/PortFolio';
 import {HomeSVG, LogOutSVG, PlusSVG, PortfolioSVG, ProfileSVG} from '../assets';
 import Home from '../components/Home/Home';
-import {Text} from 'react-native';
+import {Pressable} from 'react-native';
 import {setUId} from '../libs/functions/idManagement';
 
 export type BottomTabParamList = {
@@ -48,9 +48,9 @@ const BottomTabNavigator = ({navigation}: any) => {
               return <PortfolioSVG />;
             },
             headerRight: () => (
-              <Text style={{marginRight: 15}} onPress={onCreateProject}>
+              <Pressable style={{marginRight: 15}} onPress={onCreateProject}>
                 <PlusSVG />
-              </Text>
+              </Pressable>
             ),
           }}
         />
@@ -70,9 +70,9 @@ const BottomTabNavigator = ({navigation}: any) => {
               return <ProfileSVG />;
             },
             headerRight: () => (
-              <Text style={{marginRight: 15}} onPress={onLogOut}>
+              <Pressable style={{marginRight: 15}} onPress={onLogOut}>
                 <LogOutSVG />
-              </Text>
+              </Pressable>
             ),
           }}
         />
