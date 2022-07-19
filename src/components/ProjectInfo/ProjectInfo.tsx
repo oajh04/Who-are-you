@@ -20,9 +20,7 @@ interface Props {
 const ProjectInfo = ({navigation, route}: Props) => {
   const toast = useToast();
   const [data, setData] = useState<any | IProjectInfo>({});
-  const {name, start_at, end_at, description, image_arr, skills, id} = data;
-
-  console.log(route.params.id);
+  const {name, start_at, end_at, description, image_arr, skills} = data;
 
   const DeleteProject = async () => {
     try {
