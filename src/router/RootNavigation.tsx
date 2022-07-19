@@ -7,6 +7,8 @@ import Register from '../components/Register/Register';
 import CreateProfile from '../components/CreateProfile/CreateProfile';
 import UserProfile from '../components/UserProfile/Profile';
 import CreateProject from '../components/CreateProject/CreateProject';
+import UpdateProfile from '../components/UpdateProfile/UpdateProfile';
+import {IProfile} from '../libs/interfaces/Profile';
 
 export type RootStackParamList = BottomTabParamList & {
   Root: undefined;
@@ -16,6 +18,7 @@ export type RootStackParamList = BottomTabParamList & {
   CreateProfile: {uid: string};
   UserProfile: {uid: string};
   CreateProject: undefined;
+  UpdateProfile: IProfile;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -35,6 +38,13 @@ export default function RootNavigator() {
         component={ProjectInfo}
         options={{
           title: '프로젝트',
+        }}
+      />
+      <Stack.Screen
+        name="UpdateProfile"
+        component={UpdateProfile}
+        options={{
+          title: '프로필 수정',
         }}
       />
       <Stack.Screen
