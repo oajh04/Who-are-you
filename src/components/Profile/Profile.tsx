@@ -15,23 +15,10 @@ import InfoBox from '../common/InfoBox/InfoBox';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../router/RootNavigation';
 import {useIsFocused} from '@react-navigation/native';
+import {IProfile} from '../../libs/interfaces/Profile';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'Root'>;
-}
-
-interface IProfile {
-  name: string;
-  contact: {
-    email: string;
-    phone_number: string;
-    github: string;
-  };
-  award: string[];
-  certificate: string[];
-  skills: string[];
-  schools: string[];
-  profile_image_url: string;
 }
 
 const Profile = ({navigation}: Props) => {
@@ -53,12 +40,26 @@ const Profile = ({navigation}: Props) => {
     });
   }, [navigation, isFocused]);
 
+  const updateProfileMove = () => {
+    navigation.navigate('UpdateProfile', data);
+  };
+
   return (
     <>
       {data && (
         <View style={styles.wrapper}>
           <View style={styles.profile}>
-            <Text style={styles.title}>{data.name}</Text>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+              }}>
+              <Text style={styles.title}>{data.name}</Text>
+              <Text onPress={updateProfileMove} style={styles.changeTitle}>
+                수정
+              </Text>
+            </View>
             <Image
               source={{
                 uri: data.profile_image_url,
@@ -109,6 +110,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
+  },
+  changeTitle: {
+    fontSize: 14,
+    paddingLeft: 5,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
