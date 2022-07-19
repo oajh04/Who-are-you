@@ -12,7 +12,9 @@ const ProjectCard = ({name, description, start_at, end_at}: Props) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.description}>{name}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.description} ellipsizeMode="tail" numberOfLines={1}>
+        {description}
+      </Text>
       <Text>
         {start_at} ~ {end_at}
       </Text>
