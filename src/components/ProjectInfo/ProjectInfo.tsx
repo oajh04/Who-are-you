@@ -42,9 +42,11 @@ const ProjectInfo = ({navigation, route}: Props) => {
   };
 
   useEffect(() => {
-    navigation.setOptions({title: 'Pick'});
     getUId().then(res => setUid(res));
-    getProject(route.params.id).then(res => setData(res));
+    getProject(route.params.id).then((res: any) => {
+      setData(res);
+      navigation.setOptions({title: res.name});
+    });
   }, [navigation, route]);
 
   return (
