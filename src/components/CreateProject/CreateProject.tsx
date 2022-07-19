@@ -12,6 +12,7 @@ import {
   View,
   SafeAreaView,
   Platform,
+  Pressable,
 } from 'react-native';
 import DefaultBox from '../common/DefaultBox/DefaultBox';
 import {useToast} from 'react-native-toast-notifications';
@@ -114,6 +115,18 @@ const CreateProject = ({navigation}: Props) => {
     }
   };
 
+  const deleteArrayIndex = (keyvalue: string, value: string) => {
+    const index = data[keyvalue].indexOf(value);
+    const array = data[keyvalue].filter((_: string, idx: number) => {
+      return idx !== index;
+    });
+
+    setData({
+      ...data,
+      [keyvalue]: array,
+    });
+  };
+
   const onSelectImage = () => {
     launchImageLibrary(
       {
@@ -190,7 +203,13 @@ const CreateProject = ({navigation}: Props) => {
         <DefaultBox name="스킬">
           <View style={styles.skillBox}>
             {data.skills.map((i: string, index: number) => {
-              return <SkillCard key={`${i}-${index}`}>{i}</SkillCard>;
+              return (
+                <Pressable
+                  key={`${i}-${index}`}
+                  onPress={() => deleteArrayIndex('skills', i)}>
+                  <SkillCard>{i}</SkillCard>
+                </Pressable>
+              );
             })}
           </View>
           <TextInput
