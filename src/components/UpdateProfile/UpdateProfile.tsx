@@ -194,21 +194,25 @@ const UpdateProfile = ({navigation, route}: Props) => {
             }}>
             <View style={{display: 'flex', flexDirection: 'column'}}>
               <TextInput
+                style={styles.text}
                 placeholder="이름"
                 onChangeText={e => onChange('name', e)}
                 value={data.name}
               />
               <TextInput
+                style={styles.text}
                 placeholder="이메일"
                 onChangeText={e => onChangeContact('email', e)}
                 value={data.contact.email}
               />
               <TextInput
+                style={styles.text}
                 placeholder="전화번호"
                 onChangeText={e => onChangeContact('phone_number', e)}
                 value={data.contact.phone_number}
               />
               <TextInput
+                style={styles.text}
                 placeholder="깃허브"
                 onChangeText={e => onChangeContact('github', e)}
                 value={data.contact.github}
@@ -223,7 +227,7 @@ const UpdateProfile = ({navigation, route}: Props) => {
           </View>
         </DefaultBox>
         <DefaultBox name="학력">
-          <View>
+          <View style={styles.listBox}>
             {data.schools.map((i: string) => {
               return (
                 <Pressable
@@ -261,7 +265,7 @@ const UpdateProfile = ({navigation, route}: Props) => {
           />
         </DefaultBox>
         <DefaultBox name="수상 및 기타 이력">
-          <View style={styles.skillBox}>
+          <View style={styles.listBox}>
             {data.award.map((i: string) => {
               return (
                 <Pressable key={i} onPress={() => deleteArrayIndex('award', i)}>
@@ -278,7 +282,7 @@ const UpdateProfile = ({navigation, route}: Props) => {
           />
         </DefaultBox>
         <DefaultBox name="자격증">
-          <View style={styles.skillBox}>
+          <View style={styles.listBox}>
             {data.certificate.map((i: string) => {
               return (
                 <Pressable
@@ -313,6 +317,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
+  text: {
+    padding: 5,
+  },
   endButton: {
     margin: 15,
     paddingTop: 15,
@@ -331,6 +338,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: 5,
+  },
+  listBox: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     marginBottom: 5,
   },
   circle: {
