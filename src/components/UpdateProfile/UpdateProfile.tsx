@@ -134,7 +134,6 @@ const UpdateProfile = ({navigation, route}: Props) => {
     }
 
     if (e.nativeEvent.key === ',') {
-      console.log(topic[keyvalue]);
       setTopic({
         ...topic,
         [keyvalue]: '',
