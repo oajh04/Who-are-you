@@ -12,6 +12,7 @@ const Page = ({item}: IPage) => {
 const styles = StyleSheet.create({
   wrapper: {
     width: Dimensions.get('window').width - 50,
+    height: 200,
     margin: 10,
     justifyContent: 'center',
     alignItems: 'center',
