@@ -3,7 +3,6 @@ import {RouteProp} from '@react-navigation/native';
 import storage from '@react-native-firebase/storage';
 import React, {useState} from 'react';
 import {RootStackParamList} from '../../router/RootNavigation';
-import firestore from '@react-native-firebase/firestore';
 import {
   Dimensions,
   StyleSheet,
@@ -20,26 +19,14 @@ import {useToast} from 'react-native-toast-notifications';
 import SkillCard from '../ProjectInfo/SkillBox/SkillCard';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {IProfile} from '../../libs/interfaces/Profile';
+import {userCollection} from '../../libs/apis/user';
 
 interface ITopic {
   award: string;
   certificate: string;
   skills: string;
   schools: string;
-}
-
-interface ICreateProfile {
-  name: string;
-  contact: {
-    email: string;
-    phone_number: string;
-    github: string;
-  };
-  award: string[];
-  certificate: string[];
-  skills: string[];
-  schools: string[];
-  profile_image_url: string;
 }
 
 interface Props {
@@ -50,14 +37,13 @@ const profileUrl =
   'https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png';
 const CreateProfile = ({navigation, route}: Props) => {
   const toast = useToast();
-  const userCollection = firestore().collection('user');
   const [topic, setTopic] = useState<ITopic | any>({
     award: '',
     certificate: '',
     skills: '',
     schools: '',
   });
-  const [data, setData] = useState<ICreateProfile | any>({
+  const [data, setData] = useState<IProfile | any>({
     name: '',
     contact: {
       email: '',
