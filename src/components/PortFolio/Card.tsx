@@ -12,7 +12,9 @@ interface Props {
 const Card = ({name, description, start_at, end_at}: Props) => {
   return (
     <DefaultBox name={name}>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.description} ellipsizeMode="tail" numberOfLines={1}>
+        {description}
+      </Text>
       <Text>
         {start_at} ~ {end_at}
       </Text>
@@ -22,10 +24,7 @@ const Card = ({name, description, start_at, end_at}: Props) => {
 
 const styles = StyleSheet.create({
   description: {
-    width: '100%',
-    flexWrap: 'nowrap',
-    display: 'flex',
-    flexDirection: 'row',
+    marginBottom: 5,
   },
 });
 
