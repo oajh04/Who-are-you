@@ -11,6 +11,7 @@ import {IProjectInfo} from '../../libs/interfaces/Project';
 import {StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import {useToast} from 'react-native-toast-notifications';
+import {getUId} from '../../libs/functions/idManagement';
 
 interface Props {
   navigation: StackNavigationProp<RootStackParamList, 'ProjectInfo'>;
@@ -20,7 +21,9 @@ interface Props {
 const ProjectInfo = ({navigation, route}: Props) => {
   const toast = useToast();
   const [data, setData] = useState<any | IProjectInfo>({});
-  const {name, start_at, end_at, description, image_arr, skills} = data;
+  const [uid, setUid] = useState<string | any>('');
+  const {name, start_at, end_at, description, image_arr, skills, user_id} =
+    data;
 
   const DeleteProject = async () => {
     try {
@@ -40,6 +43,7 @@ const ProjectInfo = ({navigation, route}: Props) => {
 
   useEffect(() => {
     navigation.setOptions({title: 'Pick'});
+    getUId().then(res => setUid(res));
     getProject(route.params.id).then(res => setData(res));
   }, [navigation, route]);
 
@@ -50,9 +54,11 @@ const ProjectInfo = ({navigation, route}: Props) => {
         <SkillBox skill_arr={skills} />
         <Description image_arr={image_arr} description={description} />
       </ScrollView>
-      <Text style={styles.deleteButton} onPress={DeleteProject}>
-        프로젝트 삭제
-      </Text>
+      {user_id === uid && (
+        <Text style={styles.deleteButton} onPress={DeleteProject}>
+          프로젝트 삭제
+        </Text>
+      )}
     </SafeAreaView>
   );
 };
