@@ -68,7 +68,6 @@ const UpdateProfile = ({navigation, route}: Props) => {
   const onSend = async () => {
     for (let variable in data) {
       if (!data[variable] || data[variable].length === 0) {
-        console.log(data);
         return toast.show('빈칸을 다 채워주세요', {
           type: 'danger',
           duration: 1000,
